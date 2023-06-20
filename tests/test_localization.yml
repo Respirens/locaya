@@ -1,7 +1,0 @@
-# $code test_code
-# $name Test Name
-# $author Respirens
-# $description For testing only
-# $var1 Variable 1
-str1: This is string with $var1
-str2: This is string without $$var1

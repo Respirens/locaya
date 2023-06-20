@@ -1,32 +1,30 @@
-import glob
-import os.path
-
-from locaya import localization
+from locaya.language import Language
+from locaya.loader.base import BaseLoader
+from locaya.localization import Localization
 
 
 class Locaya:
-    def __init__(self, localizations: dict[str, localization.Localization] = None, strict: bool = False):
-        self.localizations = localizations if localizations else {}
-        self.strict = strict
+    def __init__(self, loader: BaseLoader, *, strict: bool = False):
+        self._loader: BaseLoader = loader
+        self._strict: bool = strict
+        self._localizations: dict[str, Localization] | None = None
 
-    def add(self, _localization: localization.Localization):
-        self.localizations[_localization.meta.code] = _localization
+    def load(self):
+        """
+        Load localizations by loader
+        """
+        self._localizations = self._loader()
 
-    def load(self, text: str):
-        self.add(localization.load(text, self.strict))
+    def get(self, code: str) -> Localization:
+        """
+        Returns localization with specified code
+        If ``Locaya`` is in `strict mode`, raises exception if localization is not exists,
+        else returns empty localization
+        :param code: localization code
+        :return: instance of ``Localization``
+        """
+        if self._strict:
+            return self._localizations[code]
+        return self._localizations.get(code) or Localization(Language(code), {})
 
-    def load_file(self, path: str):
-        with open(path) as file:
-            self.load(file.read())
-
-    def load_directory(self, path: str):
-        files = glob.glob(os.path.join(path, "*.yml"))
-        for file in files:
-            self.load_file(file)
-
-    def get(self, code: str) -> localization.Localization:
-        return self.localizations.get(code)
-
-    def __contains__(self, item: str) -> bool:
-        return item in self.localizations
 

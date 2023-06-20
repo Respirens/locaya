@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "locaya"
-version = "0.0.1-alpha-0"
+version = "0.0.1-alpha-1"
 description = "Simple YAML-based localization system"
 authors = ["Respirens <thesergiyprotsanin@gmail.com>"]
 readme = "README.md"

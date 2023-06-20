@@ -1,14 +1,13 @@
 # Locaya
 
-> Simple YAML-based localization system
+> Simple i18n system written in pure Python
 
 ```python
 from locaya import Locaya
 
 
-locaya = Locaya(strict=False)
-locaya.load_file("./localization.yml")
-locaya.load_directory("./localizations")
+locaya = Locaya()
+locaya.loader()
 
 localization = locaya.get("localization")
 localized_string = localization("key")
